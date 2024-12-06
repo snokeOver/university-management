@@ -1,6 +1,7 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { Error as Merr } from "mongoose";
 import { nodeEnv } from "..";
+import { ZodIssue } from "zod";
 
 export const errorHandler: ErrorRequestHandler = (
   error,
@@ -30,6 +31,12 @@ export const errorHandler: ErrorRequestHandler = (
     errorDetails = error.errorResponse;
     errMsg = `Duplicate value for field: ${Object.keys(error.keyValue)[0]}`;
     statusCode = 409;
+  } else if (error.name === "ZodError") {
+    errorDetails = error.errors;
+    errMsg = errMsg = (error.errors as ZodIssue[])
+      .map((err) => `${err.message} at ${err.path.join(",")}`)
+      .join(", ");
+    statusCode = 400;
   } else {
     errMsg = error.message || "Server error";
   }
