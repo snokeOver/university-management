@@ -30,15 +30,3 @@ export const createStudentToDB = async (
 
   return result;
 };
-
-// // Get all student data
-// export const getAllStudentDB = async () => {
-//   const result = await StudentModel.find();
-//   return result;
-// };
-
-// // Get all student data
-// export const getAStudentDB = async (studentId: string) => {
-//   const result = await StudentModel.findOne({ id: studentId });
-//   return result;
-// };

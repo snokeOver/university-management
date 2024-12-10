@@ -69,8 +69,7 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
     },
 
     dateOfBirth: {
-      type: String,
-      required: [true, "Date of birth is required"],
+      type: Date,
     },
 
     contactNo: {

@@ -1,0 +1,27 @@
+import {
+  TAcademicSemesterCode,
+  TAcademicSemesterName,
+  TMonths,
+} from "./academicSemester.type";
+
+export const months: TMonths[] = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+export const academicSemName: TAcademicSemesterName[] = [
+  "Autum",
+  "Fall",
+  "Summar",
+];
+
+export const academicSemCode: TAcademicSemesterCode[] = ["01", "02", "03"];

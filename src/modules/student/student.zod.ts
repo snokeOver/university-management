@@ -20,7 +20,7 @@ const guardianSchema = z.object({
 const studentSchema = z.object({
   name: nameSchema,
   gender: z.string(),
-  dateOfBirth: z.string(), // Use appropriate format validation if needed
+  dateOfBirth: z.date().optional(),
   contactNo: z.string(),
   emergencyContactNo: z.string(),
   bloodGroup: z.string(),
