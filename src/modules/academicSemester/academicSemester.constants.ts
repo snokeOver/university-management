@@ -1,4 +1,5 @@
 import {
+  IAcSemNameCodeMapper,
   TAcademicSemesterCode,
   TAcademicSemesterName,
   TMonths,
@@ -25,3 +26,9 @@ export const academicSemName: TAcademicSemesterName[] = [
 ];
 
 export const academicSemCode: TAcademicSemesterCode[] = ["01", "02", "03"];
+
+export const acSemNameCodeMapper: IAcSemNameCodeMapper = {
+  Autum: "01",
+  Summar: "02",
+  Fall: "03",
+};
