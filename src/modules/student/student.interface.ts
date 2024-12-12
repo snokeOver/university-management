@@ -17,7 +17,7 @@ export interface IStudent {
   userId: Types.ObjectId;
   name: IName;
   gender: "Male" | "Female" | "Others";
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   contactNo: string;
   emergencyContactNo: string;
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";

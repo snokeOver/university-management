@@ -69,7 +69,7 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
     },
 
     dateOfBirth: {
-      type: Date,
+      type: String,
     },
 
     contactNo: {
@@ -107,6 +107,11 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
 
     profileImage: {
       type: String,
+    },
+
+    academicSemister: {
+      type: Schema.Types.ObjectId,
+      ref: "academicsemisters",
     },
   },
   {
