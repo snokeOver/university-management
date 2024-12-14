@@ -29,12 +29,13 @@ export const createStudentToDB = async (
   const createdUser = await UserModel.create(newUser);
 
   if (createdUser) {
+    student.studentId = createdUser.id;
     student.userId = createdUser._id;
   } else {
     throw new Error("Failed to create user");
   }
 
   const result = await StudentModel.create(student);
-
+  result.id = createdUser.id;
   return result;
 };

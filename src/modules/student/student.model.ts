@@ -54,6 +54,11 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
       required: true,
     },
 
+    studentId: {
+      type: String,
+      required: [true, "Student Id is required"],
+    },
+
     name: {
       type: studentNameSchema,
       required: [true, "Student name is required"],

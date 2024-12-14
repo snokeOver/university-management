@@ -15,6 +15,7 @@ export interface IGuardian {
 
 export interface IStudent {
   userId: Types.ObjectId;
+  studentId: string;
   name: IName;
   gender: "Male" | "Female" | "Others";
   dateOfBirth?: string;

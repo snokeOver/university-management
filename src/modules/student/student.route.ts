@@ -1,15 +1,10 @@
 //Controller will only handle the routes with the help of express route and call the controller function
 
 import express from "express";
-import {
-  createStudent,
-  getAllStudents,
-  getAStudent,
-} from "./student.controller";
+import { getAllStudents, getAStudent } from "./student.controller";
 
 const studentRoute = express.Router();
 
-studentRoute.post("/create-student", createStudent);
 studentRoute.get("/get-all-students", getAllStudents);
 studentRoute.get("/get-a-student/:id", getAStudent);
 
