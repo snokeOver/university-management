@@ -1,32 +1,32 @@
-import { IAcademicFaculty } from "./academicDepartment.interface";
-import { AcademicFacultyModel } from "./academicFaculty.model";
+import { IAcademicDepartment } from "./academicDepartment.interface";
+import { AcademicDepartmentModel } from "./academicDepartment.model";
 
-//Create a Academic Semester to Database
-export const createAcademicFacultyIntoDB = async (
-  payload: IAcademicFaculty
+//Create a Academic Department to Database
+export const createAcademicDepartmentIntoDB = async (
+  payload: IAcademicDepartment
 ) => {
-  const result = await AcademicFacultyModel.create(payload);
+  const result = await AcademicDepartmentModel.create(payload);
   return result;
 };
 
-//Get all Academic Semester from Database
-export const getALLAcademicFacultyFromDB = async () => {
-  const result = await AcademicFacultyModel.find();
+//Get all Academic Department from Database
+export const getALLAcademicDepartmentFromDB = async () => {
+  const result = await AcademicDepartmentModel.find();
   return result;
 };
 
-//Get a Academic Semester by Id from Database
-export const getAAcademicFacultyFromDB = async (id: string) => {
-  const result = await AcademicFacultyModel.findById(id);
+//Get a Academic Department by Id from Database
+export const getAAcademicDepartmentFromDB = async (id: string) => {
+  const result = await AcademicDepartmentModel.findById(id);
   return result;
 };
 
-//Update a Academic Semester by Id from Database
-export const updateAAcademicFacultyIntoDB = async (
+//Update a Academic Department by Id from Database
+export const updateAAcademicDepartmentIntoDB = async (
   id: string,
-  payload: Partial<IAcademicFaculty>
+  payload: Partial<IAcademicDepartment>
 ) => {
-  const result = await AcademicFacultyModel.findOneAndUpdate(
+  const result = await AcademicDepartmentModel.findOneAndUpdate(
     { _id: id },
     payload,
     {

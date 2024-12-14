@@ -1,30 +1,33 @@
 import express from "express";
 
 import { validateRequest } from "../../middlewares/validateData";
-import { academicFacultyValidation } from "./academicFaculty.validation";
 import {
-  createAcademicFaculty,
-  getAAcademicFaculty,
-  getAllAcademicFaculty,
-  updateAAcademicFaculty,
-} from "./academicFaculty.controller";
+  createAcademicDepartmentValidation,
+  updateAcademicDepartmentValidation,
+} from "./academicDepartment.validation";
+import {
+  createAcademicDepartment,
+  getAAcademicDepartment,
+  getAllAcademicDepartment,
+  updateAAcademicDepartment,
+} from "./academicDepartment.controller";
 
-const academicFacultyRoute = express.Router();
+const academicDepartmentRoute = express.Router();
 
-academicFacultyRoute.post(
-  "/create-academic-faculty",
-  validateRequest(academicFacultyValidation),
-  createAcademicFaculty
+academicDepartmentRoute.post(
+  "/create-academic-department",
+  validateRequest(createAcademicDepartmentValidation),
+  createAcademicDepartment
 );
 
-academicFacultyRoute.get("/", getAllAcademicFaculty);
+academicDepartmentRoute.get("/", getAllAcademicDepartment);
 
-academicFacultyRoute.get("/:id", getAAcademicFaculty);
+academicDepartmentRoute.get("/:id", getAAcademicDepartment);
 
-academicFacultyRoute.patch(
+academicDepartmentRoute.patch(
   "/:id",
-  validateRequest(academicFacultyValidation),
-  updateAAcademicFaculty
+  validateRequest(updateAcademicDepartmentValidation),
+  updateAAcademicDepartment
 );
 
-export default academicFacultyRoute;
+export default academicDepartmentRoute;

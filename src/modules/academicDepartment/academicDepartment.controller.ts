@@ -1,23 +1,23 @@
 import { catchAsync } from "../../utils/catchAsync";
 import {
-  createAcademicFacultyIntoDB,
-  getAAcademicFacultyFromDB,
-  getALLAcademicFacultyFromDB,
-  updateAAcademicFacultyIntoDB,
-} from "./academicFaculty.service";
+  createAcademicDepartmentIntoDB,
+  getAAcademicDepartmentFromDB,
+  getALLAcademicDepartmentFromDB,
+  updateAAcademicDepartmentIntoDB,
+} from "./academicDepartment.service";
 
-export const createAcademicFaculty = catchAsync(async (req, res) => {
-  const result = await createAcademicFacultyIntoDB(req.body);
+export const createAcademicDepartment = catchAsync(async (req, res) => {
+  const result = await createAcademicDepartmentIntoDB(req.body);
 
   res.status(200).send({
     success: true,
-    message: "Academic Faculty created successfully!",
+    message: "Academic Department created successfully!",
     data: result,
   });
 });
 
-export const getAllAcademicFaculty = catchAsync(async (req, res) => {
-  const result = await getALLAcademicFacultyFromDB();
+export const getAllAcademicDepartment = catchAsync(async (req, res) => {
+  const result = await getALLAcademicDepartmentFromDB();
 
   res.status(200).send({
     success: true,
@@ -26,22 +26,22 @@ export const getAllAcademicFaculty = catchAsync(async (req, res) => {
   });
 });
 
-export const getAAcademicFaculty = catchAsync(async (req, res) => {
-  const result = await getAAcademicFacultyFromDB(req.params.id);
+export const getAAcademicDepartment = catchAsync(async (req, res) => {
+  const result = await getAAcademicDepartmentFromDB(req.params.id);
 
   res.status(200).send({
     success: true,
-    message: "Targeted Academic Faculty retrieved successfully!",
+    message: "Targeted Academic Department retrieved successfully!",
     data: result,
   });
 });
 
-export const updateAAcademicFaculty = catchAsync(async (req, res) => {
-  const result = await updateAAcademicFacultyIntoDB(req.params.id, req.body);
+export const updateAAcademicDepartment = catchAsync(async (req, res) => {
+  const result = await updateAAcademicDepartmentIntoDB(req.params.id, req.body);
 
   res.status(200).send({
     success: true,
-    message: "Targeted Academic Faculty updated successfully!",
+    message: "Targeted Academic Department updated successfully!",
     data: result,
   });
 });
