@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 import { IAcademicDepartment } from "./academicDepartment.interface";
 
-const academicDepartmentScheme = new Schema<IAcademicDepartment>(
+const academicDepartmentSchema = new Schema<IAcademicDepartment>(
   {
     name: {
       type: String,
@@ -21,7 +21,24 @@ const academicDepartmentScheme = new Schema<IAcademicDepartment>(
   }
 );
 
+//To check if the academic department is already exist before create new one
+academicDepartmentSchema.pre("save", async function () {
+  const isDepartmentExist = await AcademicDepartmentModel.findOne({
+    name: this.name,
+  });
+
+  if (isDepartmentExist) throw new Error("This department is already exist !");
+});
+
+//To check if the academic department is exist before update
+academicDepartmentSchema.pre("findOneAndUpdate", async function () {
+  const isDepartmentExist = await AcademicDepartmentModel.findOne(
+    this.getQuery()
+  );
+  if (!isDepartmentExist) throw new Error("Thid department doesn't exist");
+});
+
 export const AcademicDepartmentModel = model<IAcademicDepartment>(
   "academicdepartments",
-  academicDepartmentScheme
+  academicDepartmentSchema
 );
