@@ -27,6 +27,7 @@ export interface IStudent {
   guardian: IGuardian;
   profileImage?: string;
   academicSemister: Types.ObjectId;
+  academicDepartment: Types.ObjectId;
 }
 
 //for instace method

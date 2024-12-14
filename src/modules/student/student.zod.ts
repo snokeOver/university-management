@@ -29,6 +29,7 @@ const studentSchema = z.object({
   guardian: guardianSchema,
   profileImage: z.string().url(),
   academicSemister: z.string(),
+  academicDepartment: z.string(),
 });
 
 export const studentZodValidation = z.object({

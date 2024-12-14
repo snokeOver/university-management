@@ -118,6 +118,11 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
       type: Schema.Types.ObjectId,
       ref: "academicsemisters",
     },
+
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: "academicdepartments",
+    },
   },
   {
     timestamps: true,

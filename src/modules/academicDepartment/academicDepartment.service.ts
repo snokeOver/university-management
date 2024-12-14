@@ -11,13 +11,17 @@ export const createAcademicDepartmentIntoDB = async (
 
 //Get all Academic Department from Database
 export const getALLAcademicDepartmentFromDB = async () => {
-  const result = await AcademicDepartmentModel.find();
+  const result = await AcademicDepartmentModel.find().populate(
+    "academicFacultyId"
+  );
   return result;
 };
 
 //Get a Academic Department by Id from Database
 export const getAAcademicDepartmentFromDB = async (id: string) => {
-  const result = await AcademicDepartmentModel.findById(id);
+  const result = await AcademicDepartmentModel.findById(id).populate(
+    "academicFacultyId"
+  );
   return result;
 };
 
