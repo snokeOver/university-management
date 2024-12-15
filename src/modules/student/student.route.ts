@@ -6,6 +6,6 @@ import { getAllStudents, getAStudent } from "./student.controller";
 const studentRoute = express.Router();
 
 studentRoute.get("/get-all-students", getAllStudents);
-studentRoute.get("/get-a-student/:id", getAStudent);
+studentRoute.get("/:id", getAStudent);
 
 export default studentRoute;

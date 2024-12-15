@@ -62,3 +62,18 @@ export const createStudentToDB = async (
     throw error;
   }
 };
+
+//delete a student from database
+export const deleteSingleStudentFromDB = async (id: string) => {
+  const deletedStudent = await UserModel.findByIdAndUpdate(
+    id,
+    {
+      isDeleted: true,
+    },
+    {
+      new: true,
+    }
+  );
+
+  return deletedStudent;
+};
