@@ -59,6 +59,12 @@ userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, Number(saltRound));
 });
 
+//To check if the user id exist or not before delete
+userSchema.pre("findOneAndUpdate", async function () {
+  const isUserExist = await UserModel.findOne(this.getQuery());
+  if (!isUserExist) throw new Error("This Student doesn't exist");
+});
+
 //post save middleware to hide password
 userSchema.post("save", function () {
   this.password = "";
