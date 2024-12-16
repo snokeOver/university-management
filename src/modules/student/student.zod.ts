@@ -36,3 +36,34 @@ export const studentZodValidation = z.object({
   credentials: userValidation,
   student: studentSchema,
 });
+
+//update Name validation
+const updateNameSchema = z.object({
+  firstName: z.string().optional(),
+  middleName: z.string().optional(), // Optional field
+  lastName: z.string().optional(),
+});
+
+// Update Guardian schema
+const updateGuardianSchema = z.object({
+  guardianName: z.string().optional(),
+  guardianContactNo: z.string().optional(),
+  guardianOccupation: z.string().optional(),
+  relation: z.string().optional(),
+});
+
+// Main Student schema
+export const updateStudentZodValidation = z.object({
+  name: updateNameSchema.optional(),
+  gender: z.string().optional(),
+  dateOfBirth: z.string().optional(),
+  contactNo: z.string().optional(),
+  emergencyContactNo: z.string().optional(),
+  bloodGroup: z.string().optional(),
+  presentAddress: z.string().optional(),
+  permanetAddress: z.string().optional(),
+  guardian: updateGuardianSchema.optional(),
+  profileImage: z.string().url().optional(),
+  academicSemister: z.string().optional(),
+  academicDepartment: z.string().optional(),
+});
