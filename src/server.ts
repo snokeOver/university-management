@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { mongoUrl } from ".";
-import { AppError } from "./middlewares/errorHandler";
+import { AppError } from "./utils/error.class";
 
 interface MongooseCache {
   conn: typeof mongoose | null;

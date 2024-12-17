@@ -1,81 +1,92 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler } from "express";
 import { Error as Merr } from "mongoose";
 import { nodeEnv } from "..";
-import { ZodIssue } from "zod";
 
-export const errorHandler: ErrorRequestHandler = (
-  error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  let errMsg = "Server error";
+import { IErrorSource } from "../types-interface/err";
+import { handleZodError } from "./handleZodError";
+import { handleValidationError } from "./handleValidationError";
+import { handleStrictMode } from "./handleStrictMode";
+import { handleCastError } from "./handleCastError";
+import { handleDuplicateError } from "./handleDuplicateError";
+import { AppError } from "../utils/error.class";
+
+export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  let errorMsg = "Something Went Wrong!";
   let statusCode = error.statusCode || 500;
-  let errorDetails = error.errors;
+
+  let errSources: IErrorSource[] = [
+    { path: "", message: "Something Went Wrong!" },
+  ];
 
   // console.log(error);
 
   //Check for specific error
-  if (error.name === "NotFoundError") {
-    errMsg = error.message;
-    statusCode = 404;
+  if (error instanceof AppError) {
+    //Errors we throw by AppError
+    statusCode = error.statusCode;
+    errorMsg = error.name;
+    errSources = [
+      {
+        path: "",
+        message: error.message,
+      },
+    ];
+  } else if (error instanceof Error) {
+    //Errors we throw by AppError
+
+    errorMsg = error.message;
+    errSources = [
+      {
+        path: "",
+        message: error.message,
+      },
+    ];
   } else if (error.name === "StrictModeError") {
-    const msg = error.message;
-    errMsg = "Additional field not allowed";
-    statusCode = 400;
-    errorDetails = {
-      error: msg.split(" ").slice(1).join(" "),
-    };
-  } else if (error instanceof Merr.ValidationError) {
-    errMsg = "Validation failed";
-    statusCode = 400;
+    //Mongoose strict mode error
+    const { status, message, sources } = handleStrictMode(error);
+
+    statusCode = status;
+    errorMsg = message;
+    errSources = sources;
   } else if (error.code === 11000) {
-    errorDetails = error.errorResponse;
-    errMsg = `Duplicate value for field: ${Object.keys(error.keyValue)[0]}`;
-    statusCode = 409;
+    // Mongoose duplicate value for unique field
+    const { status, message, sources } = handleDuplicateError(error);
+    statusCode = status;
+    errorMsg = message;
+    errSources = sources;
   } else if (error.name === "ZodError") {
-    errorDetails = error.errors;
-    errMsg = errMsg = (error.errors as ZodIssue[])
-      .map((err) => `${err.message} at ${err.path.join(",")}`)
-      .join(", ");
-    statusCode = 400;
+    //Zod validation error
+    const { status, message, sources } = handleZodError(error);
+
+    statusCode = status;
+    errorMsg = message;
+    errSources = sources;
+  } else if (error.name === "ValidationError") {
+    //Mongoose validation error
+    const { status, message, sources } = handleValidationError(error);
+
+    statusCode = status;
+    errorMsg = message;
+    errSources = sources;
+  } else if (error.name === "CastError") {
+    //Mongoose cast error for wrong params
+    const { status, message, sources } = handleCastError(error);
+
+    statusCode = status;
+    errorMsg = message;
+    errSources = sources;
   } else {
-    errMsg = error.message || "Server error";
+    errorMsg = error.message || "Server error";
   }
 
   const response = {
-    message: errMsg,
     success: false,
-    error: {
-      name: error.name || "UnknownError",
-      errors: errorDetails,
-    },
-
-    stack: nodeEnv === "development" ? error.stack : null,
+    message: errorMsg,
+    errSources,
+    showError: error,
+    ...(nodeEnv === "development" && { stack: error?.stack }),
   };
 
   res.status(statusCode).send(response);
   void next;
 };
-
-export class NotFoundError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "NotFoundError";
-  }
-}
-
-export class AppError extends Error {
-  constructor(
-    public statusCode: number,
-    public name: string,
-    public message: string,
-    public stack: string = ""
-  ) {
-    super(message);
-    this.statusCode = statusCode;
-    this.name = name;
-    if (stack) this.stack = stack;
-    else Error.captureStackTrace(this, this.constructor);
-  }
-}

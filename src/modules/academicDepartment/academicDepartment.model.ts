@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IAcademicDepartment } from "./academicDepartment.interface";
-import { AppError } from "../../middlewares/errorHandler";
+import { AppError } from "../../utils/error.class";
 
 const academicDepartmentSchema = new Schema<IAcademicDepartment>(
   {
@@ -32,7 +32,7 @@ academicDepartmentSchema.pre("save", async function () {
     throw new AppError(
       409,
       "Already Exist",
-      "Thid department is already exist"
+      "This department is already exist"
     );
 });
 

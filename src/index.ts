@@ -5,6 +5,7 @@ import { connectToDB } from "./server";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFound } from "./middlewares/notFound";
 import router from "./routes/routes";
+import { Server } from "http";
 
 //Initialize dotenv variable access
 dotenv.config();
@@ -29,9 +30,11 @@ app.use("/api", router);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello from University Management");
+
+  // Promise.reject();
 });
 
-app.listen(serverPort, () => {
+const server: Server = app.listen(serverPort, () => {
   console.log(`UM is listening on ${serverPort}`);
 });
 
@@ -42,3 +45,23 @@ app.use("/", notFound);
 
 //Export for vercel configuration
 export default app;
+
+//For asynchronous process
+process.on("unhandledRejection", () => {
+  console.log(`unhandledRejection is detected, shutting down server...`);
+
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  }
+
+  process.exit(1);
+});
+
+//For synchronous process
+process.on("uncaughtException", () => {
+  console.log(`uncaughtException is detected, shutting down server...`);
+
+  process.exit(1);
+});

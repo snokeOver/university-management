@@ -8,7 +8,7 @@ import { StudentModel } from "../student/student.model";
 import { IUser } from "./user.interface";
 import { UserModel } from "./user.model";
 import { generateStudentId } from "./user.utils";
-import { AppError } from "../../middlewares/errorHandler";
+import { AppError } from "../../utils/error.class";
 
 // import { status } from "http-status";
 
