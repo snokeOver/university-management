@@ -127,6 +127,7 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
   {
     timestamps: true,
     strict: "throw", // prevents extra fields and throw error
+    toJSON: { virtuals: true },
   }
 );
 
@@ -143,6 +144,11 @@ studentSchema.statics.isStudentExist = async function (id: string) {
 
   return existingStudent;
 };
+
+//virtual fullName
+studentSchema.virtual("fullName").get(function () {
+  return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
+});
 
 export const StudentModel = model<IStudent, newStudentModel>(
   "students",
