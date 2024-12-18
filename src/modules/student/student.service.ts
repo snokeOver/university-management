@@ -6,7 +6,7 @@ import { StudentModel } from "./student.model";
 
 // Get all student data
 export const getAllStudentDB = async (query: Record<string, unknown>) => {
-  const excludeFields = ["searchTerm", "sort", "limit"];
+  const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
   const copiedQuery = { ...query };
 
   //query----------------------
@@ -35,9 +35,6 @@ export const getAllStudentDB = async (query: Record<string, unknown>) => {
 
   excludeFields.forEach((el) => delete copiedQuery[el]);
 
-  console.log("Base query:", query);
-  console.log("copied query:", copiedQuery);
-
   const myFilter = mySearch.find(copiedQuery);
 
   //sorting -----------------------
@@ -45,10 +42,23 @@ export const getAllStudentDB = async (query: Record<string, unknown>) => {
 
   const mySort = myFilter.sort(sortQuery);
 
-  //Limiting--------------
+  //Limiting and pagination--------------
   const limitQuery = query.limit ? (query.limit as number) : 1;
+  const pageQuery = query.page ? (query.page as number) : 1;
+  const skipQuery = query.page ? ((query.page as number) - 1) * limitQuery : 0;
 
-  const result = await mySort.limit(limitQuery);
+  console.log({ query }, { copiedQuery });
+  console.log(limitQuery, pageQuery, skipQuery);
+
+  const myPagination = mySort.skip(skipQuery).limit(limitQuery);
+
+  //Fields limiting
+
+  const fieldsQuery = query.fields
+    ? (query.fields as string).split(",").join(" ")
+    : "-__v";
+
+  const result = await myPagination.select(fieldsQuery);
 
   return result;
 };
