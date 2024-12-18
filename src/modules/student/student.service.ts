@@ -6,6 +6,10 @@ import { StudentModel } from "./student.model";
 
 // Get all student data
 export const getAllStudentDB = async (query: Record<string, unknown>) => {
+  const excludeFields = ["searchTerm", "sort", "limit"];
+  const copiedQuery = { ...query };
+
+  //query----------------------
   const { searchTerm } = query;
 
   const querryFields = ["email", "name.firstName", "presentAddress"];
@@ -18,7 +22,7 @@ export const getAllStudentDB = async (query: Record<string, unknown>) => {
       }
     : {};
 
-  const result = await StudentModel.find(searchQuery)
+  const mySearch = StudentModel.find(searchQuery)
     .populate({
       path: "academicDepartment",
       populate: {
@@ -26,6 +30,25 @@ export const getAllStudentDB = async (query: Record<string, unknown>) => {
       },
     })
     .populate("academicSemister");
+
+  //Filtering---------------------
+
+  excludeFields.forEach((el) => delete copiedQuery[el]);
+
+  console.log("Base query:", query);
+  console.log("copied query:", copiedQuery);
+
+  const myFilter = mySearch.find(copiedQuery);
+
+  //sorting -----------------------
+  const sortQuery = query.sort ? (query.sort as string) : "-createdAt"; //Default sort based on createdAt
+
+  const mySort = myFilter.sort(sortQuery);
+
+  //Limiting--------------
+  const limitQuery = query.limit ? (query.limit as number) : 1;
+
+  const result = await mySort.limit(limitQuery);
 
   return result;
 };
