@@ -59,8 +59,7 @@ export const createStudentToDB = async (
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
-    throw new Error("Failed to create student");
-    void error;
+    throw new Error(error);
   }
 };
 

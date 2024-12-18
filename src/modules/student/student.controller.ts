@@ -10,7 +10,7 @@ import {
 import { catchAsync } from "../../utils/catchAsync";
 
 export const getAllStudents = catchAsync(async (req, res) => {
-  const result = await getAllStudentDB();
+  const result = await getAllStudentDB(req.query);
   res.status(200).send({
     success: true,
     message: "Students data fetched successfully!",

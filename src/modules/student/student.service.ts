@@ -5,8 +5,20 @@ import { IStudent } from "./student.interface";
 import { StudentModel } from "./student.model";
 
 // Get all student data
-export const getAllStudentDB = async () => {
-  const result = await StudentModel.find()
+export const getAllStudentDB = async (query: Record<string, unknown>) => {
+  const { searchTerm } = query;
+
+  const querryFields = ["email", "name.firstName", "presentAddress"];
+
+  const searchQuery = searchTerm
+    ? {
+        $or: querryFields.map((field) => ({
+          [field]: { $regex: searchTerm, $options: "i" },
+        })),
+      }
+    : {};
+
+  const result = await StudentModel.find(searchQuery)
     .populate({
       path: "academicDepartment",
       populate: {
