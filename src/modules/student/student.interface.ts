@@ -1,10 +1,9 @@
 import { Model, Types } from "mongoose";
-
-export interface IName {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-}
+import {
+  IName,
+  TBloodGroup,
+  TGender,
+} from "../../types-interface/typesInterface";
 
 export interface IGuardian {
   guardianName: string;
@@ -17,11 +16,11 @@ export interface IStudent {
   userId: Types.ObjectId;
   studentId: string;
   name: IName;
-  gender: "Male" | "Female" | "Others";
+  gender: TGender;
   dateOfBirth?: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  bloodGroup?: TBloodGroup;
   presentAddress: string;
   permanetAddress: string;
   guardian: IGuardian;

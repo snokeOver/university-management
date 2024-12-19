@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IAcademicFaculty } from "./academicFaculty.interface";
+import { AppError } from "../../utils/error.class";
 
 const academicFacultyScheme = new Schema<IAcademicFaculty>(
   {
@@ -21,7 +22,12 @@ academicFacultyScheme.pre("save", async function () {
     name: this.name,
   });
 
-  if (isDepartmentExist) throw new Error("This faculty is already exist !");
+  if (isDepartmentExist)
+    throw new AppError(
+      409,
+      "Duplicate Facuty",
+      "This faculty is already exist !"
+    );
 });
 
 //To check if the academic faculty is exist before update

@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from "express";
-import { Error as Merr } from "mongoose";
+
 import { nodeEnv } from "..";
 
 import { IErrorSource } from "../types-interface/err";

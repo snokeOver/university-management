@@ -2,7 +2,11 @@
 
 // import { userValidation } from "./user.zod";
 import { catchAsync } from "../../utils/catchAsync";
-import { createStudentToDB, deleteSingleStudentFromDB } from "./user.service";
+import {
+  createAdminIntoDB,
+  createStudentToDB,
+  deleteSingleStudentFromDB,
+} from "./user.service";
 
 //Create a student data
 export const createStudent = catchAsync(async (req, res) => {
@@ -12,6 +16,18 @@ export const createStudent = catchAsync(async (req, res) => {
   res.status(200).send({
     success: true,
     message: "Student created successfully!",
+    data: result,
+  });
+});
+
+//Create a Admin data
+export const createAdmin = catchAsync(async (req, res) => {
+  const { credentials, admin } = req.body;
+
+  const result = await createAdminIntoDB(credentials, admin);
+  res.status(200).send({
+    success: true,
+    message: "Admin created successfully!",
     data: result,
   });
 });

@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
-import { IGuardian, IStudent, newStudentModel } from "./student.interface";
 import { IName } from "../../types-interface/typesInterface";
+import { IAdmin, newAdminModel } from "./admin.interface";
 
-const studentNameSchema = new Schema<IName>({
+const adminNameSchema = new Schema<IName>({
   firstName: {
     type: String,
     required: [true, "First name is required"],
@@ -20,29 +20,7 @@ const studentNameSchema = new Schema<IName>({
   },
 });
 
-const studentGuardianSchema = new Schema<IGuardian>({
-  guardianName: {
-    type: String,
-    required: [true, "Guardian's name is required"],
-  },
-
-  guardianContactNo: {
-    type: String,
-    required: [true, "Guardian's contact number is required"],
-  },
-
-  guardianOccupation: {
-    type: String,
-    required: [true, "Guardian's occupation is required"],
-  },
-
-  relation: {
-    type: String,
-    required: [true, "Relation is required"],
-  },
-});
-
-const studentSchema = new Schema<IStudent, newStudentModel>(
+const adminSchema = new Schema<IAdmin, newAdminModel>(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -50,14 +28,19 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
       required: true,
     },
 
-    studentId: {
+    adminId: {
       type: String,
-      required: [true, "Student Id is required"],
+      required: [true, "admin Id is required"],
+    },
+
+    designation: {
+      type: String,
+      required: [true, "admin Designation is required"],
     },
 
     name: {
-      type: studentNameSchema,
-      required: [true, "Student name is required"],
+      type: adminNameSchema,
+      required: [true, "admin name is required"],
     },
 
     gender: {
@@ -101,23 +84,8 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
       required: [true, "Permanent address is required"],
     },
 
-    guardian: {
-      type: studentGuardianSchema,
-      required: [true, "Guardian information is required"],
-    },
-
     profileImage: {
       type: String,
-    },
-
-    academicSemister: {
-      type: Schema.Types.ObjectId,
-      ref: "academicsemisters",
-    },
-
-    academicDepartment: {
-      type: Schema.Types.ObjectId,
-      ref: "academicdepartments",
     },
   },
   {
@@ -127,26 +95,16 @@ const studentSchema = new Schema<IStudent, newStudentModel>(
   }
 );
 
-/*
-//custom instance method
-studentSchema.methods.isStudentExist = async function (id: string) {
-  const existingStudent = await StudentModel.findOne({ id });
-  return existingStudent;
-};
-*/
 //static method
-studentSchema.statics.isStudentExist = async function (id: string) {
-  const existingStudent = await StudentModel.findOne({ id });
+adminSchema.statics.isAdminExist = async function (id: string) {
+  const existingAdmin = await AdminModel.findOne({ id });
 
-  return existingStudent;
+  return existingAdmin;
 };
 
 //virtual fullName
-studentSchema.virtual("fullName").get(function () {
+adminSchema.virtual("fullName").get(function () {
   return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
 });
 
-export const StudentModel = model<IStudent, newStudentModel>(
-  "students",
-  studentSchema
-);
+export const AdminModel = model<IAdmin, newAdminModel>("admins", adminSchema);

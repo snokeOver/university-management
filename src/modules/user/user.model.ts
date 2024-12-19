@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import { IUser } from "./user.interface";
 import { saltRound } from "../..";
 import bcrypt from "bcrypt";
+import { AppError } from "../../utils/error.class";
 
 const userSchema = new Schema<IUser>(
   {
@@ -56,13 +57,26 @@ const userSchema = new Schema<IUser>(
 
 //Pre save middleware: will work on create() and save() to encrypt password
 userSchema.pre("save", async function () {
+  const isUserExist = await UserModel.findOne({
+    email: this.email,
+  });
+
+  if (isUserExist)
+    throw new AppError(409, "Duplicate Email", "This User is already exist !");
+
   this.password = await bcrypt.hash(this.password, Number(saltRound));
 });
 
 //To check if the user id exist or not before delete
 userSchema.pre("findOneAndUpdate", async function () {
   const isUserExist = await UserModel.findOne(this.getQuery());
-  if (!isUserExist) throw new Error("This Student doesn't exist");
+  if (!isUserExist) {
+    throw new AppError(
+      404,
+      "User Not Found",
+      "The user you are trying to update does not exist!"
+    );
+  }
 });
 
 //post save middleware to hide password
