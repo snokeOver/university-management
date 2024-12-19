@@ -3,6 +3,7 @@
 import express from "express";
 import {
   createAdmin,
+  createFaculty,
   createStudent,
   deleteSingleStudent,
 } from "./user.controller";
@@ -10,6 +11,7 @@ import {
 import { studentZodValidation } from "../student/student.zod";
 import { validateRequest } from "../../middlewares/validateData";
 import { adminZodValidation } from "../admin/admin.zod";
+import { facultyZodValidation } from "../faculty/faculty.zod";
 
 const userRoute = express.Router();
 
@@ -17,6 +19,12 @@ userRoute.post(
   "/create-student",
   validateRequest(studentZodValidation),
   createStudent
+);
+
+userRoute.post(
+  "/create-faculty",
+  validateRequest(facultyZodValidation),
+  createFaculty
 );
 
 userRoute.post(

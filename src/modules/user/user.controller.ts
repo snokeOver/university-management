@@ -4,6 +4,7 @@
 import { catchAsync } from "../../utils/catchAsync";
 import {
   createAdminIntoDB,
+  createFacultyIntoDB,
   createStudentToDB,
   deleteSingleStudentFromDB,
 } from "./user.service";
@@ -16,6 +17,18 @@ export const createStudent = catchAsync(async (req, res) => {
   res.status(200).send({
     success: true,
     message: "Student created successfully!",
+    data: result,
+  });
+});
+
+//Create a Faculty data
+export const createFaculty = catchAsync(async (req, res) => {
+  const { credentials, faculty } = req.body;
+
+  const result = await createFacultyIntoDB(credentials, faculty);
+  res.status(200).send({
+    success: true,
+    message: "Faculty created successfully!",
     data: result,
   });
 });

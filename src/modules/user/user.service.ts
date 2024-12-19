@@ -7,10 +7,16 @@ import { IStudent } from "../student/student.interface";
 import { StudentModel } from "../student/student.model";
 import { IUser } from "./user.interface";
 import { UserModel } from "./user.model";
-import { generateAdminId, generateStudentId } from "./user.utils";
+import {
+  generateAdminId,
+  generateFacultyId,
+  generateStudentId,
+} from "./user.utils";
 import { AppError } from "../../utils/error.class";
 import { IAdmin } from "../admin/admin.interface";
 import { AdminModel } from "../admin/admin.model";
+import { IFaculty } from "../faculty/faculty.interface";
+import { FacultyModel } from "../faculty/faculty.model";
 
 // import { status } from "http-status";
 
@@ -51,6 +57,49 @@ export const createStudentToDB = async (
 
     if (!result.length)
       throw new AppError(509, "Bad Request", "Failed to create new user");
+
+    result[0].id = createdUser[0].id;
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw error;
+  }
+};
+
+// Create a Faculty data
+export const createFacultyIntoDB = async (
+  credentials: Partial<IUser>,
+  faculty: IFaculty
+) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const newUser: Partial<IUser> = {
+      id: await generateFacultyId(),
+      password: credentials.password || defPass,
+      email: credentials.email,
+      role: "Faculty",
+    };
+
+    const createdUser = await UserModel.create([newUser], { session });
+
+    if (!createdUser.length)
+      throw new AppError(509, "Bad Request", "Failed to create user");
+
+    faculty.facultyId = createdUser[0].id;
+    faculty.userId = createdUser[0]._id;
+
+    const result = await FacultyModel.create([faculty], { session });
+
+    if (!result.length)
+      throw new AppError(509, "Bad Request", "Failed to create new Faculty");
 
     result[0].id = createdUser[0].id;
 
