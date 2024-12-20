@@ -96,20 +96,39 @@ export const updateSingleCourseIntoDB = async (
         (el) => el.course && !el.isDeleted
       );
 
-      const newPreRequisiteCourses = await CourseModel.findByIdAndUpdate(
-        id,
-        {
-          $addToSet: { preRequisitCourses: { $each: newPreRequisite } },
-        },
-        {
-          new: true,
-          runValidators: true,
-          session,
-        }
+      const currentData = await CourseModel.findById(id, "preRequisitCourses", {
+        session,
+      });
+
+      const existingCourses = currentData?.preRequisitCourses.map(
+        (el) => el.course
+      );
+      // Filter out courses that already exist
+      const existingCourseIds = existingCourses?.map((id) => id.toString());
+
+      // Filter out courses that already exist
+      const uniqueNewPreRequisites = newPreRequisite.filter(
+        (el) => !existingCourseIds?.includes(el.course.toString())
       );
 
-      if (!newPreRequisiteCourses)
-        throw new AppError(409, "Bad Request", "Failed to update Course");
+      if (uniqueNewPreRequisites.length > 0) {
+        const newPreRequisiteCourses = await CourseModel.findByIdAndUpdate(
+          id,
+          {
+            $addToSet: {
+              preRequisitCourses: { $each: uniqueNewPreRequisites },
+            },
+          },
+          {
+            new: true,
+            runValidators: true,
+            session,
+          }
+        );
+
+        if (!newPreRequisiteCourses)
+          throw new AppError(409, "Bad Request", "Failed to update Course");
+      }
     }
 
     await session.commitTransaction();
