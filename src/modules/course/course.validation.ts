@@ -21,4 +21,7 @@ export const courseValidation = z.object({
     invalid_type_error: "Course code must be number",
   }),
   preRequisitCourses: z.array(preRequisitValidation).optional(),
+  isDeleted: z.boolean().optional(),
 });
+
+export const updateCourseValidation = courseValidation.partial();

@@ -1,10 +1,11 @@
 import { catchAsync } from "../../utils/catchAsync";
-import { updateSingleAadminIntoDB } from "../admin/admin.service";
+
 import {
   createCourseIntoDB,
   deleteSingleCourseFromDB,
   getALLCourseFromDB,
   getSingleCourseFromDB,
+  updateSingleCourseIntoDB,
 } from "./course.service";
 
 export const createCourse = catchAsync(async (req, res) => {
@@ -48,7 +49,7 @@ export const deleteSingleCourse = catchAsync(async (req, res) => {
 });
 
 export const updateSingleCourse = catchAsync(async (req, res) => {
-  const result = await updateSingleAadminIntoDB(req.params.id, req.body);
+  const result = await updateSingleCourseIntoDB(req.params.id, req.body);
 
   res.status(200).send({
     success: true,

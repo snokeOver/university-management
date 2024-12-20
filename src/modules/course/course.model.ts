@@ -37,6 +37,11 @@ const courseScheme = new Schema<ICourse>(
       trim: true,
     },
     preRequisitCourses: [preRequisitCoursesSchema],
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

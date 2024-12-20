@@ -1,7 +1,7 @@
 import express from "express";
 
 import { validateRequest } from "../../middlewares/validateData";
-import { courseValidation } from "./course.validation";
+import { courseValidation, updateCourseValidation } from "./course.validation";
 import {
   createCourse,
   deleteSingleCourse,
@@ -26,7 +26,7 @@ courseRoute.delete("/:id", deleteSingleCourse);
 
 courseRoute.patch(
   "/:id",
-  validateRequest(courseValidation),
+  validateRequest(updateCourseValidation),
   updateSingleCourse
 );
 
