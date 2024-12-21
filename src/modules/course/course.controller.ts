@@ -1,6 +1,7 @@
 import { catchAsync } from "../../utils/catchAsync";
 
 import {
+  assignFacultiesWithCourseIntoDB,
   createCourseIntoDB,
   deleteSingleCourseFromDB,
   getALLCourseFromDB,
@@ -54,6 +55,16 @@ export const updateSingleCourse = catchAsync(async (req, res) => {
   res.status(200).send({
     success: true,
     message: "Targeted Academic Course updated successfully!",
+    data: result,
+  });
+});
+
+export const assignFacultiesWithCourse = catchAsync(async (req, res) => {
+  const result = await assignFacultiesWithCourseIntoDB(req.params.id, req.body);
+
+  res.status(200).send({
+    success: true,
+    message: "Faculties assigned successfully!",
     data: result,
   });
 });

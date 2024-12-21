@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { QueryBuilder } from "../../builder/QueryBuilder";
 import { courseSearchFields } from "./course.constant";
-import { ICourse } from "./course.interface";
-import { CourseModel } from "./course.model";
+import { ICourse, ICourseFaculties } from "./course.interface";
+import { CourseFacultyModel, CourseModel } from "./course.model";
 import mongoose from "mongoose";
 import { AppError } from "../../utils/error.class";
 
@@ -142,4 +142,24 @@ export const updateSingleCourseIntoDB = async (
     await session.endSession();
     throw error;
   }
+};
+
+//Assign Faculties to DB
+export const assignFacultiesWithCourseIntoDB = async (
+  id: string,
+  payload: Partial<ICourseFaculties>
+) => {
+  const result = await CourseFacultyModel.findByIdAndUpdate(
+    id,
+    {
+      course: id,
+      $addToSet: { faculties: { $each: payload.faculties } },
+    },
+    {
+      upsert: true,
+      new: true,
+    }
+  );
+
+  return result;
 };

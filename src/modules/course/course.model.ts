@@ -1,5 +1,9 @@
 import { model, Schema } from "mongoose";
-import { ICourse, IPrerequisitCourses } from "./course.interface";
+import {
+  ICourse,
+  ICourseFaculties,
+  IPrerequisitCourses,
+} from "./course.interface";
 // import { AppError } from "../../utils/error.class";
 
 const preRequisitCoursesSchema = new Schema<IPrerequisitCourses>({
@@ -49,24 +53,30 @@ const courseScheme = new Schema<ICourse>(
   }
 );
 
-//To check if the academic faculty is already exist before create new one
-// academicFacultyScheme.pre("save", async function () {
-//   const isDepartmentExist = await AcademicFacultyModel.findOne({
-//     name: this.name,
-//   });
-
-//   if (isDepartmentExist)
-//     throw new AppError(
-//       409,
-//       "Duplicate Facuty",
-//       "This faculty is already exist !"
-//     );
-// });
-
-//To check if the academic faculty is exist before update
-// academicFacultyScheme.pre("findOneAndUpdate", async function () {
-//   const isDepartmentExist = await AcademicFacultyModel.findOne(this.getQuery());
-//   if (!isDepartmentExist) throw new Error("Thid faculty doesn't exist");
-// });
-
 export const CourseModel = model<ICourse>("courses", courseScheme);
+
+const courseFacultyScheme = new Schema<ICourseFaculties>(
+  {
+    course: {
+      type: Schema.Types.ObjectId,
+      ref: "courses",
+      required: [true, "Course missing"],
+      unique: true,
+    },
+    faculties: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "faculties",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+    strict: "throw",
+  }
+);
+
+export const CourseFacultyModel = model<ICourseFaculties>(
+  "coursefaculties",
+  courseFacultyScheme
+);

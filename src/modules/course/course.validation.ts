@@ -25,3 +25,7 @@ export const courseValidation = z.object({
 });
 
 export const updateCourseValidation = courseValidation.partial();
+
+export const assignFacultiesValidation = z.object({
+  faculties: z.array(z.string()),
+});

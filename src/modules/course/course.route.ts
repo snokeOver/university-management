@@ -1,8 +1,13 @@
 import express from "express";
 
 import { validateRequest } from "../../middlewares/validateData";
-import { courseValidation, updateCourseValidation } from "./course.validation";
 import {
+  assignFacultiesValidation,
+  courseValidation,
+  updateCourseValidation,
+} from "./course.validation";
+import {
+  assignFacultiesWithCourse,
   createCourse,
   deleteSingleCourse,
   getAllCourses,
@@ -23,6 +28,12 @@ courseRoute.get("/", getAllCourses);
 courseRoute.get("/:id", getSingleCourse);
 
 courseRoute.delete("/:id", deleteSingleCourse);
+
+courseRoute.post(
+  "/assign-faculties/:id",
+  validateRequest(assignFacultiesValidation),
+  assignFacultiesWithCourse
+);
 
 courseRoute.patch(
   "/:id",
