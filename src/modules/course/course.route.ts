@@ -12,6 +12,7 @@ import {
   deleteSingleCourse,
   getAllCourses,
   getSingleCourse,
+  removeFacultiesFromCourse,
   updateSingleCourse,
 } from "./course.controller";
 
@@ -29,10 +30,16 @@ courseRoute.get("/:id", getSingleCourse);
 
 courseRoute.delete("/:id", deleteSingleCourse);
 
-courseRoute.post(
+courseRoute.put(
   "/assign-faculties/:id",
   validateRequest(assignFacultiesValidation),
   assignFacultiesWithCourse
+);
+
+courseRoute.delete(
+  "/delete-faculties/:id",
+  validateRequest(assignFacultiesValidation),
+  removeFacultiesFromCourse
 );
 
 courseRoute.patch(

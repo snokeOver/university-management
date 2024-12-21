@@ -163,3 +163,21 @@ export const assignFacultiesWithCourseIntoDB = async (
 
   return result;
 };
+
+//Remove Faculties to DB
+export const removeFacultiesFromCourseFromDB = async (
+  id: string,
+  payload: Partial<ICourseFaculties>
+) => {
+  const result = await CourseFacultyModel.findByIdAndUpdate(
+    id,
+    {
+      $pull: { faculties: { $in: payload.faculties } },
+    },
+    {
+      new: true,
+    }
+  );
+
+  return result;
+};

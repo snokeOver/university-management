@@ -6,6 +6,7 @@ import {
   deleteSingleCourseFromDB,
   getALLCourseFromDB,
   getSingleCourseFromDB,
+  removeFacultiesFromCourseFromDB,
   updateSingleCourseIntoDB,
 } from "./course.service";
 
@@ -65,6 +66,16 @@ export const assignFacultiesWithCourse = catchAsync(async (req, res) => {
   res.status(200).send({
     success: true,
     message: "Faculties assigned successfully!",
+    data: result,
+  });
+});
+
+export const removeFacultiesFromCourse = catchAsync(async (req, res) => {
+  const result = await removeFacultiesFromCourseFromDB(req.params.id, req.body);
+
+  res.status(200).send({
+    success: true,
+    message: "Faculties removed successfully!",
     data: result,
   });
 });
