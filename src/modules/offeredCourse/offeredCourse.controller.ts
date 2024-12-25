@@ -4,6 +4,7 @@ import {
   createOfferedCouseIntoDB,
   getALLOfferedCouseFromDB,
   getSingleOfferedCouseFromDB,
+  updateSinlgleOfferedCouseIntoDB,
 } from "./offeredCourse.service";
 
 export const createOfferedCouse = catchAsync(async (req, res) => {
@@ -37,7 +38,7 @@ export const getSingleOfferedCouse = catchAsync(async (req, res) => {
 });
 
 export const updateSingleOfferedCouse = catchAsync(async (req, res) => {
-  const result = await updateSingleAadminIntoDB(req.params.id, req.body);
+  const result = await updateSinlgleOfferedCouseIntoDB(req.params.id, req.body);
 
   res.status(200).send({
     success: true,

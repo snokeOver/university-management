@@ -10,6 +10,7 @@ import { AcademicDepartmentModel } from "../academicDepartment/academicDepartmen
 import { CourseModel } from "../course/course.model";
 import { FacultyModel } from "../faculty/faculty.model";
 import { hasTimeConflict } from "./offeredCourse.utils";
+import { SemisterRegistrationModel } from "../semesterRegistration/semesterRegistration.model";
 
 const offeredCourseSchema = new Schema<IOfferedCouse>(
   {
@@ -122,6 +123,63 @@ offeredCourseSchema.pre("save", async function () {
       400,
       "Bad Request",
       "This department doesn't belong to this faculty!"
+    );
+
+  //Get the schedules of the faculties
+  const assignedSchedules = await OfferedCourseModel.find({
+    semesterRegistration,
+    faculty,
+    days: { $in: days },
+  }).select("days startTime endTime");
+
+  const newSchedule = {
+    days,
+    startTime,
+    endTime,
+  };
+
+  if (hasTimeConflict(assignedSchedules, newSchedule))
+    throw new AppError(
+      409,
+      "Conflict",
+      "This faculty isn't available at that time. Choose other time or day"
+    );
+});
+
+//Pre hook before update
+offeredCourseSchema.pre("findOneAndUpdate", async function () {
+  //check if there the semister is already ended
+  const query = this.getQuery();
+  const update = this.getUpdate();
+  const payload = update as Pick<
+    IOfferedCouse,
+    "faculty" | "days" | "startTime" | "endTime"
+  >;
+
+  const { faculty, days, startTime, endTime } = payload;
+
+  //Check if offered Course is exist
+  const existOfferedCourse = await OfferedCourseModel.findById(query._id);
+
+  if (!existOfferedCourse)
+    throw new AppError(400, "Bad Request", "Offered Course not exist!");
+
+  //Check if Faculty id is exist
+  const existedFaculty = await FacultyModel.findById(payload.faculty);
+
+  if (!existedFaculty)
+    throw new AppError(400, "Bad Request", "Faculty not exist!");
+
+  const semesterRegistration = existOfferedCourse.semesterRegistration;
+
+  const semesterRegistrationStatus = await SemisterRegistrationModel.findById(
+    semesterRegistration
+  );
+  if (semesterRegistrationStatus?.status !== "UPCOMING")
+    throw new AppError(
+      400,
+      "Bad Request",
+      `Update Failed as it is ${semesterRegistrationStatus?.status}"`
     );
 
   //Get the schedules of the faculties

@@ -74,13 +74,15 @@ semisterRegistrationScheme.pre("save", async function () {
 semisterRegistrationScheme.pre("findOneAndUpdate", async function () {
   //check if there the semister is already ended
   const query = this.getQuery();
+
+  const update = this.getUpdate();
+  const payload = update as Partial<ISemesterRegistration>;
+
   const requestedSemister = await SemisterRegistrationModel.findById(query._id);
 
   if (requestedSemister?.status === regiStatus.ENDED)
     throw new AppError(400, "Bad Request", "Semester alredy Ended!");
 
-  const update = this.getUpdate();
-  const payload = update as Partial<ISemesterRegistration>;
   if (
     payload &&
     payload?.status === regiStatus.UPCOMING &&
