@@ -31,16 +31,6 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
         message: error.message,
       },
     ];
-  } else if (error instanceof Error) {
-    //Errors we throw by AppError
-
-    errorMsg = error.message;
-    errSources = [
-      {
-        path: "",
-        message: error.message,
-      },
-    ];
   } else if (error.name === "StrictModeError") {
     //Mongoose strict mode error
     const { status, message, sources } = handleStrictMode(error);
@@ -75,6 +65,16 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
     statusCode = status;
     errorMsg = message;
     errSources = sources;
+  } else if (error instanceof Error) {
+    //Errors we throw by AppError
+
+    errorMsg = error.message;
+    errSources = [
+      {
+        path: "",
+        message: error.message,
+      },
+    ];
   } else {
     errorMsg = error.message || "Server error";
   }

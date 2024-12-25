@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 import { ISemesterRegistration } from "./semesterRegistration.interface";
-import { semisterStatus } from "./semesterRegistration.constants";
+import { regiStatus, semisterStatus } from "./semesterRegistration.constants";
 import { AcademicSemesterMoel } from "../academicSemester/academicSemester.model";
 import { AppError } from "../../utils/error.class";
 
@@ -76,15 +76,15 @@ semisterRegistrationScheme.pre("findOneAndUpdate", async function () {
   const query = this.getQuery();
   const requestedSemister = await SemisterRegistrationModel.findById(query._id);
 
-  if (requestedSemister?.status === "ENDED")
+  if (requestedSemister?.status === regiStatus.ENDED)
     throw new AppError(400, "Bad Request", "Semester alredy Ended!");
 
   const update = this.getUpdate();
   const payload = update as Partial<ISemesterRegistration>;
   if (
     payload &&
-    payload?.status === "UPCOMING" &&
-    requestedSemister?.status === "ONGOING"
+    payload?.status === regiStatus.UPCOMING &&
+    requestedSemister?.status === regiStatus.ONGOING
   )
     throw new AppError(
       400,

@@ -5,3 +5,9 @@ export const academicSemistersFields = [
   "name.firstName",
   "presentAddress",
 ];
+
+export const regiStatus = {
+  ONGOING: "ONGOING",
+  UPCOMING: "UPCOMING",
+  ENDED: "ENDED",
+} as const;
