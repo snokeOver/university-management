@@ -1,10 +1,10 @@
 import { model, Schema } from "mongoose";
-import { IUser } from "./user.interface";
+import { IUser, IUserModel } from "./user.interface";
 import { saltRound } from "../..";
 import bcrypt from "bcrypt";
 import { AppError } from "../../utils/error.class";
 
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema<IUser, IUserModel>(
   {
     id: {
       type: String,
@@ -84,4 +84,19 @@ userSchema.post("save", function () {
   this.password = "";
 });
 
-export const UserModel = model<IUser>("users", userSchema);
+//static method
+userSchema.statics.isUserExist = async function (id: string) {
+  return await UserModel.findOne({
+    id,
+    isDeleted: false,
+  });
+};
+
+userSchema.statics.isPasswordMatched = async function (
+  password: string,
+  hashedPass
+) {
+  return await bcrypt.compare(password, hashedPass);
+};
+
+export const UserModel = model<IUser, IUserModel>("users", userSchema);
