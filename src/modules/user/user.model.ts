@@ -104,4 +104,12 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcrypt.compare(password, hashedPass);
 };
 
+userSchema.statics.isJWTValidYet = function (
+  passChangedAt: Date,
+  jwtIssuedAt: number
+) {
+  const passwordChageTime = new Date(passChangedAt).getTime() / 1000;
+  return passwordChageTime > jwtIssuedAt;
+};
+
 export const UserModel = model<IUser, IUserModel>("users", userSchema);
