@@ -6,6 +6,7 @@ export interface IUser {
   email: string;
   password: string;
   needPasswordChange: boolean;
+  passwordChangedAt?: Date;
   role: "Student" | "Admin" | "Faculty";
   status: "Active" | "InActive";
   isDeleted: boolean;

@@ -69,6 +69,7 @@ export const changePasswordIntoDB = async (
     {
       password: hashedPass,
       needPasswordChange: false,
+      passwordChangedAt: new Date(),
     },
     {
       new: true,
