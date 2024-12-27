@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import { notFound } from "./middlewares/notFound";
 import router from "./routes/routes";
 import { Server } from "http";
+import cookieParser from "cookie-parser";
 
 //Initialize dotenv variable access
 dotenv.config();
@@ -27,7 +28,8 @@ const app = express();
 
 //Primary middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ origin: ["http://localhost:5173"] }));
 
 //Applicatin route
 app.use("/api", router);

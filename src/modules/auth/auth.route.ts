@@ -1,8 +1,19 @@
 import express from "express";
 
-import { validateRequest } from "../../middlewares/validateData";
-import { changePassValidation, loginValidation } from "./auth.validation";
-import { changePassword, loginUser } from "./auth.controller";
+import {
+  validateRequest,
+  validateTokenRequest,
+} from "../../middlewares/validateData";
+import {
+  changePassValidation,
+  loginValidation,
+  refreshTokenValidation,
+} from "./auth.validation";
+import {
+  changePassword,
+  getTokenByRefreshToken,
+  loginUser,
+} from "./auth.controller";
 import { auth } from "../../middlewares/auth";
 import { USER_ROLE } from "../user/user.constant";
 
@@ -14,6 +25,12 @@ authRoute.post(
   auth(USER_ROLE.Admin, USER_ROLE.Faculty, USER_ROLE.Student),
   validateRequest(changePassValidation),
   changePassword
+);
+
+authRoute.post(
+  "/refresh-token",
+  validateTokenRequest(refreshTokenValidation),
+  getTokenByRefreshToken
 );
 
 export default authRoute;

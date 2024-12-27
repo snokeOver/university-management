@@ -17,3 +17,9 @@ export const changePassValidation = z.object({
     required_error: "New Password is required",
   }),
 });
+
+export const refreshTokenValidation = z.object({
+  refreshToken: z.string({
+    required_error: "Refresh Token is required",
+  }),
+});

@@ -10,3 +10,12 @@ export const validateRequest = (
     next();
   });
 };
+
+export const validateTokenRequest = (
+  validation: AnyZodObject | ZodEffects<AnyZodObject>
+) => {
+  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    await validation.parseAsync(req.cookies);
+    next();
+  });
+};

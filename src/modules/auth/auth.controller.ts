@@ -1,6 +1,10 @@
 import { nodeEnv } from "../..";
 import { catchAsync } from "../../utils/catchAsync";
-import { changePasswordIntoDB, loginUserFromDB } from "./auth.service";
+import {
+  changePasswordIntoDB,
+  getTokenByRefreshTokenFromBackend,
+  loginUserFromDB,
+} from "./auth.service";
 
 export const loginUser = catchAsync(async (req, res) => {
   const result = await loginUserFromDB(req.body);
@@ -13,11 +17,23 @@ export const loginUser = catchAsync(async (req, res) => {
 
   res.status(200).send({
     success: true,
-    message: "Loin success!",
+    message: "Login success!",
     data: {
       accessToken,
       needPassChange,
     },
+  });
+});
+
+export const getTokenByRefreshToken = catchAsync(async (req, res) => {
+  const result = await getTokenByRefreshTokenFromBackend(
+    req.cookies.refreshToken
+  );
+
+  res.status(200).send({
+    success: true,
+    message: "token by refresh token send success!",
+    data: result,
   });
 });
 

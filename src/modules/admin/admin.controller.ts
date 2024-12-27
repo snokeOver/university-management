@@ -10,6 +10,7 @@ import {
 
 export const getAllAdmins = catchAsync(async (req, res) => {
   const result = await getAllAdminFromDB(req.query);
+
   res.status(200).send({
     success: true,
     message: "Admins data fetched successfully!",
