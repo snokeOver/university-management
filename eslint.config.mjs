@@ -13,6 +13,7 @@ export default [
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": "warn",
+      "@typescript-eslint/no-namespace": "off",
     },
   },
 ];

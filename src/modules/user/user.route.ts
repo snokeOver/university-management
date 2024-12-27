@@ -12,6 +12,8 @@ import { studentZodValidation } from "../student/student.zod";
 import { validateRequest } from "../../middlewares/validateData";
 import { adminZodValidation } from "../admin/admin.zod";
 import { facultyZodValidation } from "../faculty/faculty.zod";
+import { auth } from "../../middlewares/auth";
+import { USER_ROLE } from "./user.constant";
 
 const userRoute = express.Router();
 
@@ -29,6 +31,7 @@ userRoute.post(
 
 userRoute.post(
   "/create-admin",
+  auth(USER_ROLE.Admin),
   validateRequest(adminZodValidation),
   createAdmin
 );

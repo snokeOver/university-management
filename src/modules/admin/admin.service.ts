@@ -8,7 +8,10 @@ import { AdminModel } from "./admin.model";
 
 // Get all admin data
 export const getAllAdminFromDB = async (query: Record<string, unknown>) => {
-  const adminQuery = new QueryBuilder(AdminModel.find(), query)
+  const adminQuery = new QueryBuilder(
+    AdminModel.find().populate("userId"),
+    query
+  )
     .search(adminSearchFields)
     .filter()
     .sort()

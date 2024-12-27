@@ -10,10 +10,12 @@ import {
   updateSingleAdmin,
 } from "./admin.controller";
 import { updateadminZodValidation } from "./admin.zod";
+import { auth } from "../../middlewares/auth";
+import { USER_ROLE } from "../user/user.constant";
 
 const adminRoute = express.Router();
 
-adminRoute.get("/get-all-admins", getAllAdmins);
+adminRoute.get("/get-all-admins", auth(USER_ROLE.Admin), getAllAdmins);
 adminRoute.get("/:id", getSingleAdmin);
 adminRoute.delete("/:id", deleteSingleAdmin);
 adminRoute.patch(

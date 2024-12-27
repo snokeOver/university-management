@@ -8,3 +8,12 @@ export const loginValidation = z.object({
     required_error: "User Password is required",
   }),
 });
+
+export const changePassValidation = z.object({
+  oldPassword: z.string({
+    required_error: "Old Password is required",
+  }),
+  newPassword: z.string({
+    required_error: "New Password is required",
+  }),
+});

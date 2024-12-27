@@ -21,6 +21,7 @@ const userSchema = new Schema<IUser, IUserModel>(
     password: {
       type: String,
       required: true,
+      select: 0,
     },
 
     needPasswordChange: {
@@ -89,7 +90,7 @@ userSchema.statics.isUserExist = async function (id: string) {
   return await UserModel.findOne({
     id,
     isDeleted: false,
-  });
+  }).select("+password");
 };
 
 userSchema.statics.isPasswordMatched = async function (
