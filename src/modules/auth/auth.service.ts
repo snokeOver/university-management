@@ -1,10 +1,17 @@
-import { jwt_secret, saltRound } from "../..";
+import {
+  jwt_access_expire,
+  jwt_access_secret,
+  jwt_refresh_expire,
+  jwt_refresh_secret,
+  saltRound,
+} from "../..";
 import { AppError } from "../../utils/error.class";
 
 import { UserModel } from "../user/user.model";
 import { IChangeUserPassword, ILoginUser } from "./auth.interface";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { createToken } from "./auth.utils";
 
 //Authenticate User Login
 export const loginUserFromDB = async (payload: ILoginUser) => {
@@ -27,17 +34,26 @@ export const loginUserFromDB = async (payload: ILoginUser) => {
     email: foundUser.email,
     role: foundUser.role,
   };
-  const accessToken = jwt.sign(jwtPayload, jwt_secret as string, {
-    expiresIn: "10d",
-  });
+  const accessToken = createToken(
+    jwtPayload,
+    jwt_access_secret as string,
+    jwt_access_expire as string
+  );
+
+  const refreshToken = createToken(
+    jwtPayload,
+    jwt_refresh_secret as string,
+    jwt_refresh_expire as string
+  );
 
   return {
     accessToken,
+    refreshToken,
     needPassChange: foundUser.needPasswordChange,
   };
 };
 
-//Authenticate User Login
+//Authenticate for changed password
 export const changePasswordIntoDB = async (
   payload: IChangeUserPassword,
   authData: JwtPayload

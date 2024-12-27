@@ -14,7 +14,10 @@ export const nodeEnv = process.env.NODE_ENV;
 export const serverPort = process.env.SERVER_PORT;
 export const saltRound = process.env.SALT_ROUND;
 export const defPass = process.env.DEFAULT_PASS;
-export const jwt_secret = process.env.JWT_SECRET;
+export const jwt_access_secret = process.env.JWT_SECRET;
+export const jwt_refresh_secret = process.env.JWT_REFRESH_SECRET;
+export const jwt_access_expire = process.env.JWT_ACCESS_EXPIRES_IN;
+export const jwt_refresh_expire = process.env.JWT_REFRESH_EXPIRES_IN;
 
 //Connect Mongodb
 connectToDB();

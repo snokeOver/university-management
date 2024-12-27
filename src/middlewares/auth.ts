@@ -3,9 +3,10 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { AppError } from "../utils/error.class";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { jwt_secret } from "..";
+
 import { TUserRole } from "../modules/user/user.interface";
 import { UserModel } from "../modules/user/user.model";
+import { jwt_access_secret } from "..";
 
 export const auth = (...userRole: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -16,7 +17,10 @@ export const auth = (...userRole: TUserRole[]) => {
       throw new AppError(401, "UnAuthorized", "You are not authorized !");
 
     //Check if token is valid
-    const decoded = jwt.verify(token, jwt_secret as string) as JwtPayload;
+    const decoded = jwt.verify(
+      token,
+      jwt_access_secret as string
+    ) as JwtPayload;
 
     const { role, id, iat } = decoded;
     //Check if the user has permission
