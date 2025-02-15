@@ -11,6 +11,7 @@ import {
   academicSemesterValidationUpdate,
 } from "./academicSemester.validation";
 import { validateRequest } from "../../middlewares/validateData";
+import { auth } from "../../middlewares/auth";
 
 const academicSemesterRoute = express.Router();
 
@@ -20,7 +21,7 @@ academicSemesterRoute.post(
   createAcademicSemester
 );
 
-academicSemesterRoute.get("/", getAllAcademicSemester);
+academicSemesterRoute.get("/", auth("Admin"), getAllAcademicSemester);
 
 academicSemesterRoute.get("/:id", getAAcademicSemester);
 
